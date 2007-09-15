@@ -63,10 +63,10 @@ It has no Mandriva patches and no third-party drivers.
 %define build_doc 0
 %define build_source 1
 
-%define distro_branch %(perl -pe '/(\\d+)\\.(\\d)\\.?(\\d)?/; $_="$1.$2"' /etc/mandrake-release)
-%define build_101 %(if [ `awk '{print $4}' /etc/mandrake-release` = 10.1 ];then echo 1; else echo 0; fi)
-%define build_100 %(if [ `awk '{print $4}' /etc/mandrake-release` = 10.0 ];then echo 1; else echo 0; fi)
-%define build_92 %(if [ `awk '{print $4}' /etc/mandrake-release` = 9.2 ];then echo 1; else echo 0; fi)
+%define distro_branch %(perl -pe '/(\\d+)\\.(\\d)\\.?(\\d)?/; $_="$1.$2"' /etc/mandriva-release)
+%define build_101 %(if [ `awk '{print $4}' /etc/mandriva-release` = 10.1 ];then echo 1; else echo 0; fi)
+%define build_100 %(if [ `awk '{print $4}' /etc/mandriva-release` = 10.0 ];then echo 1; else echo 0; fi)
+%define build_92 %(if [ `awk '{print $4}' /etc/mandriva-release` = 9.2 ];then echo 1; else echo 0; fi)
 
 %define build_up 1
 %define build_smp 0
