@@ -2,14 +2,14 @@
 
 %define kernelversion	2
 %define patchlevel	6
-%define sublevel	19
+%define sublevel	22
 
-%define vserver_version 2.2.0-rc6
+%define vserver_version 2.2.0.4
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kstable wich are either 0 (empty), rc (kpatch) or stable release (kstable)
 %define kpatch		0
-%define kstable		1
+%define kstable		9
 
 # this is the releaseversion
 %define mdvrelease 	1
@@ -159,9 +159,8 @@ Source15: kernel-linus-mdvconfig.h
 Source16: linux-merge-config.awk
 Source17: update_configs
 
-Source20: kernel-%{tar_ver}-i386.config
-Source22: kernel-%{tar_ver}-x86_64.config
-
+Source20: kernel-2.6.22-i386.config
+Source22: kernel-2.6.22-x86_64.config
 
 ####################################################################
 #
@@ -174,20 +173,16 @@ Source22: kernel-%{tar_ver}-x86_64.config
 # Pre linus patch: ftp://ftp.kernel.org/pub/linux/kernel/v2.%{major}/testing
 
 %if %kpatch
-Patch1:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/testing/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}
+Patch1:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/testing/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}.bz2
 Source10:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/testing/patch-%{kernelversion}.%{patchlevel}.%{sublevel}-%{kpatch}.bz2.sign
 %endif
 %if %kstable
-Patch1:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/patch-%{kversion}
+Patch1:         ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/patch-%{kversion}.bz2
 Source10:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchlevel}/patch-%{kversion}.bz2.sign
 %endif
 
-# fix the file content corruption bug that appeared in 2.6.19. Will be remowed when 2.6.19.2 is released
-Patch100:	VM_Fix-nasty-and-subtle-race-in-shared-mmaped-page-writeback.patch
-
 # VServer patches
 Patch200: http://ftp.linux-vserver.org/pub/kernel/vs2.2/testing/patch-%{kversion}-vs%{vserver_version}.diff
-Patch201: http://ftp.linux-vserver.org/pub/kernel/vs2.2/testing/patch-%{kversion}-vs%{vserver_version}-fixes.diff
 
 #END
 ####################################################################
@@ -717,12 +712,8 @@ pushd %src_dir
 # FIXME: Re-add config.h to support our Autoconf for now
 install -m 644 %{SOURCE14} include/linux/config.h
 
-# fix the file content corruption bug that appeared in 2.6.19. Will be remowed when 2.6.19.2 is released 
-%patch100 -p1
-
 # VServer patches
 %patch200 -p1
-%patch201 -p1
 
 popd
 
@@ -1077,7 +1068,7 @@ done
 
 pushd %{target_modules}
 for i in *; do
-	/sbin/depmod-25 -u -ae -b %{buildroot} -r -F %{target_boot}/System.map-$i $i
+	/sbin/depmod -u -ae -b %{buildroot} -r -F %{target_boot}/System.map-$i $i
 	echo $?
 done
 
@@ -1085,7 +1076,7 @@ for i in *; do
 	pushd $i
 	echo "Creating module.description for $i"
 	modules=`find . -name "*.ko.gz"`
-	echo $modules | xargs /sbin/modinfo-25 \
+	echo $modules | xargs /sbin/modinfo \
 	| perl -lne 'print "$name\t$1" if $name && /^description:\s*(.*)/; $name = $1 if m!^filename:\s*(.*)\.k?o!; $name =~ s!.*/!!' > modules.description
 	popd
 done
@@ -1307,6 +1298,8 @@ exit 0
 %dir %{_kerneldir}/include
 %{_kerneldir}/.config
 %{_kerneldir}/.gitignore
+%{_kerneldir}/.mailmap
+%{_kerneldir}/.missing-syscalls.d
 %{_kerneldir}/Kbuild
 %{_kerneldir}/COPYING
 %{_kerneldir}/CREDITS
@@ -1325,6 +1318,7 @@ exit 0
 %{_kerneldir}/arch/x86_64
 %{_kerneldir}/arch/xtensa
 %{_kerneldir}/arch/um
+%{_kerneldir}/arch/blackfin
 %{_kerneldir}/block
 %{_kerneldir}/crypto
 %{_kerneldir}/drivers
@@ -1355,6 +1349,7 @@ exit 0
 %{_kerneldir}/include/asm-x86_64
 %{_kerneldir}/include/asm-xtensa
 %{_kerneldir}/include/asm-um
+%{_kerneldir}/include/asm-blackfin
 %{_kerneldir}/include/config
 %{_kerneldir}/include/crypto
 %{_kerneldir}/include/linux
