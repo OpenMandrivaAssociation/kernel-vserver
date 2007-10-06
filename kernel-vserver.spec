@@ -797,6 +797,9 @@ PrepareKernel() {
 	%endif
 	%endif
 
+	### FIXME MDV bugs #29744, #29074, #34055 c5, will be removed when fixed upstream
+	LC_ALL=C perl -p -i -e "s/^source/### source/" drivers/crypto/Kconfig
+	
 	%smake -s mrproper
 	cp arch/%{target_arch}/$config_name .config
 	%smake oldconfig
