@@ -758,7 +758,7 @@ rm -rf kernel-headers/
 
 %build
 # Common target directories
-%define _kerneldir /usr/src/linux-%{buildrel}
+%define _kerneldir /usr/src/%{kname}-%{buildrel}
 %define _bootdir /boot
 %ifarch ia64
 %define _efidir %{_bootdir}/efi/mandriva
@@ -986,12 +986,12 @@ tar cf - . | tar xf - -C %{target_source}
 chmod -R a+rX %{target_source}
 
 # we remove all the source files that we don't ship
-
 # first architecture files
-for i in arm avr32 cris mips mips64 parisc s390 s390x sh sh64 arm26 h8300 m68knommu v850 m32r frv; do
+for i in arm arm26 avr32 blackfin cris frv h8300 mips m32r m68knommu parisc s390 sh sh64 v850 xtensa; do
 	rm -rf %{target_source}/arch/$i
 	rm -rf %{target_source}/include/asm-$i
 done
+
 # ppc needs m68k headers
 rm -rf %{target_source}/arch/m68k
 
@@ -1207,20 +1207,20 @@ exit 0
 %post -n %{kname}-source-%{buildrel}
 cd /usr/src
 rm -f linux
-ln -snf linux-%{buildrel} linux
+ln -snf %{kname}-%{buildrel} linux
 /sbin/service kheader start 2>/dev/null >/dev/null || :
 # we need to create /build only when there is a source tree.
 
 for i in /lib/modules/%{buildrel}*; do
 	if [ -d $i ]; then
-		ln -sf /usr/src/linux-%{buildrel} $i/build
-		ln -sf /usr/src/linux-%{buildrel} $i/source
+		ln -sf /usr/src/%{kname}-%{buildrel} $i/build
+		ln -sf /usr/src/%{kname}-%{buildrel} $i/source
 	fi
 done
 
 %postun -n %{kname}-source-%{buildrel}
 if [ -L /usr/src/linux ]; then 
-    if [ -L /usr/src/linux -a `ls -l /usr/src/linux 2>/dev/null| awk '{ print $11 }'` = "linux-%{buildrel}" ]; then
+    if [ -L /usr/src/linux -a `ls -l /usr/src/linux 2>/dev/null| awk '{ print $11 }'` = "%{kname}-%{buildrel}" ]; then
 	[ $1 = 0 ] && rm -f /usr/src/linux
     fi
 fi
@@ -1235,20 +1235,20 @@ exit 0
 %post -n %{kname}-source-stripped-%{buildrel}
 cd /usr/src
 rm -f linux
-ln -snf linux-%{buildrel} linux
+ln -snf %{kname}-%{buildrel} linux
 /sbin/service kheader start 2>/dev/null >/dev/null || :
 # we need to create /build only when there is a source tree.
 
 for i in /lib/modules/%{buildrel}*; do
 	if [ -d $i ]; then
-		ln -sf /usr/src/linux-%{buildrel} $i/build
-		ln -sf /usr/src/linux-%{buildrel} $i/source
+		ln -sf /usr/src/%{kname}-%{buildrel} $i/build
+		ln -sf /usr/src/%{kname}-%{buildrel} $i/source
 	fi
 done
 
 %postun -n %{kname}-source-stripped-%{buildrel}
 if [ -L /usr/src/linux ]; then 
-    if [ -L /usr/src/linux -a `ls -l /usr/src/linux 2>/dev/null| awk '{ print $11 }'` = "linux-%{buildrel}" ]; then
+    if [ -L /usr/src/linux -a `ls -l /usr/src/linux 2>/dev/null| awk '{ print $11 }'` = "%{kname}-%{buildrel}" ]; then
 	[ $1 = 0 ] && rm -f /usr/src/linux
     fi
 fi
@@ -1319,9 +1319,7 @@ exit 0
 %{_kerneldir}/arch/sparc
 %{_kerneldir}/arch/sparc64
 %{_kerneldir}/arch/x86_64
-%{_kerneldir}/arch/xtensa
 %{_kerneldir}/arch/um
-%{_kerneldir}/arch/blackfin
 %{_kerneldir}/block
 %{_kerneldir}/crypto
 %{_kerneldir}/drivers
@@ -1350,9 +1348,7 @@ exit 0
 %{_kerneldir}/include/asm-sparc
 %{_kerneldir}/include/asm-sparc64
 %{_kerneldir}/include/asm-x86_64
-%{_kerneldir}/include/asm-xtensa
 %{_kerneldir}/include/asm-um
-%{_kerneldir}/include/asm-blackfin
 %{_kerneldir}/include/config
 %{_kerneldir}/include/crypto
 %{_kerneldir}/include/linux
