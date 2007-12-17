@@ -199,7 +199,6 @@ Patch200: http://ftp.linux-vserver.org/pub/kernel/vs2.2/testing/patch-%{kversion
 
 %define kprovides kernel = %{tar_ver}, alsa
 
-BuildRoot: 	%{_tmppath}/%{name}-%{kversion}-build
 Autoreqprov: 	no
 BuildRequires: 	gcc module-init-tools >= 0.9.15
 
