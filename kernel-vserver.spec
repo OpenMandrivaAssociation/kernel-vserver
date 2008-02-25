@@ -21,7 +21,7 @@
 %define patchlevel	6
 %define sublevel	22
 
-%define vserver_version 2.2.0.4
+%define vserver_version 2.2.0.6
 
 # kernel Makefile extraversion is substituted by 
 # kpatch/kstable wich are either 0 (empty), rc (kpatch) or stable release (kstable)
