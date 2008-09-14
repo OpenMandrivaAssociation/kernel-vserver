@@ -172,8 +172,10 @@ Source10:       ftp://ftp.kernel.org/pub/linux/kernel/v%{kernelversion}.%{patchl
 %endif
 
 # VServer patches
-Patch200: http://ftp.linux-vserver.org/pub/kernel/vs2.2/testing/patch-%{kversion}-vs%{vserver_version}.diff
+Patch200: 	http://ftp.linux-vserver.org/pub/kernel/vs2.2/testing/patch-%{kversion}-vs%{vserver_version}.diff
 
+# GCC fixes
+Patch300: 	prevent-loop-in-timespec_add_ns-from-being-optimised-away.patch
 #END
 ####################################################################
 
@@ -485,6 +487,10 @@ pushd %src_dir
 
 # vserver patches
 %patch200 -p1
+
+# gcc fixes
+%patch300 -p1
+
 popd
 # PATCH END
 
