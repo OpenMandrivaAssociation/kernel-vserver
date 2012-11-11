@@ -1,0 +1,7 @@
+sources:
+  "kernel-2.6.22-i386.config:"	809f36375427f589a42762909b8dcfc6bce7e814
+  "kernel-2.6.22-x86_64.config:"	981d68500f33907b3ada3e3492d99e23b3416e81
+  "linux-2.6.22.tar.bz2:"	39401f195a618f397312d6d84ff9aebe28d99381
+  "linux-2.6.22.tar.bz2.sign:"	1af3f98fb2f7b2a0ac7d2c9a89d6464f609aaa6b
+  "README.kernel-sources:"	a99423be3b915afdad9633b0fa4ab6af139ada36
+  "README.MandrivaLinux:"	d9fd584b29249abcfc126c8c1c857556ed8fef38
