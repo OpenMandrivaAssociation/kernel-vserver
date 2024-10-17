@@ -135,7 +135,7 @@ License: 	GPL
 Group: 		System/Cluster
 ExclusiveArch: 	%{ix86} x86_64
 ExclusiveOS: 	Linux
-URL: 		http://wiki.mandriva.com/en/Docs/Howto/Manbo_Kernels#kernel-vserver
+URL: 		https://wiki.mandriva.com/en/Docs/Howto/Manbo_Kernels#kernel-vserver
 
 ####################################################################
 #
